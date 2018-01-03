@@ -13,11 +13,11 @@ class Action {
 private:
 	std::string name;
 	float value;
-	float variance;
+	float volatilite;
 public:
-	Action(std::string name, float value, float variance);
+	Action(std::string name, float value, float volatilite);
 	float getValue();
-	float getVariance();
+	float getVolatilite();
 	std::string getName();
 	void afficher();
 };

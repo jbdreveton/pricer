@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Option_Asian.h"
 
+
 Option_Asian::Option_Asian(float strike, float maturite, Action action) : Option(strike, maturite, action) {
 	_type = "Asian";
 }
@@ -19,7 +20,7 @@ void Option_Asian::setGain_moyen(int nb_simulation) {
 	for (int i = 0; i<nb_simulation; i++) {
 		std::vector<float> simulation = genererTrajectoire();
 		double sum = std::accumulate(simulation.begin(), simulation.end(), 0.0);
-		double mean = sum / simulation.size();
+		double mean = sum / simulation.size();  /* calcul du prix moyen de l'actif, qui sera comparé au strike */
 		if (mean > getStrike()) {
 			gain_call += mean - getStrike();
 		}
@@ -52,8 +53,9 @@ void Option_Asian::afficher() {
 	std::cout << "Type de l'option: " << _type << std::endl;
 	std::cout << "Nom de l'actif: " << getAction().getName() << std::endl;
 	std::cout << "Strike: " << getStrike() << std::endl;
-	std::cout << "Maturite: " << getMaturite() << std::endl;
-	std::cout << "Volatilite: " << getAction().getVariance() << std::endl;
+	std::cout << "Maturit\x82: " << getMaturite() << std::endl;
+	std::cout << "Volatilit\x82 du sous-jacent: " << getAction().getVolatilite() << std::endl;
+	std::cout << "Prix initial du sous-jacent: " << getAction().getValue() << std::endl;
 	std::cout << "Prix du call: " << price_call << std::endl;
 	std::cout << "Prix du put: " << price_put << std::endl;
 	return;

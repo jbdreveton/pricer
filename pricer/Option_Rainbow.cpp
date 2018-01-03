@@ -36,20 +36,20 @@ void Option_Rainbow::setGain_moyen(int nb_simulation) {
 	for (int i = 0; i<nb_simulation; i++) {
 		std::vector<float> resultat_final;
 		for (int j = 0; j < nb_actifs; j++) {
-			resultat_final.push_back(vecteur_option[j].genererTrajectoire()[vecteur_option[j].genererTrajectoire().size()-1]);	
+			resultat_final.push_back(vecteur_option[j].genererTrajectoire()[vecteur_option[j].genererTrajectoire().size()-1]);	/* prix final actif j simulation i */
 		}
-		double max = *std::max_element(resultat_final.begin(), resultat_final.end());
-		double min = *std::min_element(resultat_final.begin(), resultat_final.end());
-		if (max - getStrike() > 0) {
+		double max = *std::max_element(resultat_final.begin(), resultat_final.end()); /* recherche du prix final maximal des différents actifs sur la simulation i */
+		double min = *std::min_element(resultat_final.begin(), resultat_final.end()); /* recherche du prix final minimal des différents actifs sur la simulation i */
+		if (max - getStrike() > 0) { /* cas où le call-max rapporte */
 			gain_call_max += max-getStrike();
 		}
-		else {
+		else { /* cas où le put-max rapporte */
 			gain_put_max += getStrike() - max;
 		}
-		if (min - getStrike() > 0) {
+		if (min - getStrike() > 0) { /* cas où le call-min rapporte */
 			gain_call_min += min - getStrike();
 		}
-		else {
+		else { /* cas où le put-min rapporte */
 			gain_put_min += getStrike() - min;
 		}
 	}
@@ -91,13 +91,13 @@ void Option_Rainbow::afficher() {
 	for (int i = 0; i < nb_actifs; i++) {
 		std::cout << "Nom de l'actif " << i + 1 << " : " << vecteur_option[i].getAction().getName() << std::endl;
 		std::cout << "Prix initial de l'actif " << i+1 << " : " << vecteur_option[i].getAction().getValue() << std::endl;
-		std::cout << "Volatilité de l'actif " << i+1 << " : " << vecteur_option[i].getAction().getVariance() << std::endl;
+		std::cout << "Volatilit\x82 de l'actif " << i+1 << " : " << vecteur_option[i].getAction().getVolatilite() << std::endl;
 	}
 	std::cout << "Strike: " << getStrike() << std::endl;
-	std::cout << "Maturite: " << getMaturite() << std::endl;
-	std::cout << "Prix du call max : " << price_call_max << std::endl;
-	std::cout << "Prix du call min : " << price_call_min << std::endl;
-	std::cout << "Prix du put max : " << price_put_max << std::endl;
-	std::cout << "Prix du put min : " << price_put_min << std::endl;
+	std::cout << "Maturit\x82: " << getMaturite() << std::endl;
+	std::cout << "Prix du call-max : " << price_call_max << std::endl;
+	std::cout << "Prix du call-min : " << price_call_min << std::endl;
+	std::cout << "Prix du put-max : " << price_put_max << std::endl;
+	std::cout << "Prix du put-min : " << price_put_min << std::endl;
 	return;
 }

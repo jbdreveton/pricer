@@ -19,10 +19,10 @@ void Option_European::setGain_moyen(int nb_simulation) {
 	float gain_put = 0;
 	for (int i = 0; i<nb_simulation; i++) {
 		std::vector<float> simulation = genererTrajectoire();
-		if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) {
+		if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) { /* cas où le call rapporte*/
 			gain_call += simulation[floor(getMaturite() * 365) - 1] - getStrike();
 		}
-		else {
+		else { /* cas où le put rapporte */
 			gain_put += getStrike() - simulation[floor(getMaturite() * 365) - 1];
 		}
 	}
@@ -51,8 +51,9 @@ void Option_European::afficher() {
 	std::cout << "Type de l'option: " << _type << std::endl;
 	std::cout << "Nom de l'actif: " << getAction().getName() << std::endl;
 	std::cout << "Strike: " << getStrike() << std::endl;
-	std::cout << "Maturite: " << getMaturite() << std::endl;
-	std::cout << "Volatilite: " << getAction().getVariance() << std::endl;
+	std::cout << "Maturit\x82: " << getMaturite() << std::endl;
+	std::cout << "Volatilit\x82: " << getAction().getVolatilite() << std::endl;
+	std::cout << "Prix initial du sous-jacent: " << getAction().getValue() << std::endl;
 	std::cout << "Prix du call: " << price_call << std::endl;
 	std::cout << "Prix du put: " << price_put << std::endl;
 	return;

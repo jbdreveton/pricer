@@ -53,34 +53,34 @@ void Option_Barrier::setGain_moyen(int nb_simulation) {
 		double max = *std::max_element(simulation.begin(), simulation.end());
 		double min = *std::min_element(simulation.begin(), simulation.end());
 		if (max > barrier) {
-			if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) {
+			if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) { /* cas où le call up-and-in rapporte */
 				gain_call_up_and_in += simulation[floor(getMaturite() * 365) - 1] - getStrike();
 			}
-			else {
+			else { /* cas où le put up-and-in rapporte */
 				gain_put_up_and_in += getStrike() - simulation[floor(getMaturite() * 365) - 1];
 			}
 		}
 		else {
-			if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) {
+			if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) { /* cas où le call up-and-out rapporte */
 				gain_call_up_and_out += simulation[floor(getMaturite() * 365) - 1] - getStrike();
 			}
-			else {
+			else { /* cas où le put up-and-out rapporte */
 				gain_put_up_and_out += getStrike() - simulation[floor(getMaturite() * 365) - 1];
 			}
 		}
 		if (min < barrier) {
-			if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) {
+			if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) { /* cas où le call down-and-in rapporte */
 				gain_call_down_and_in += simulation[floor(getMaturite() * 365) - 1] - getStrike();
 			}
-			else {
+			else { /* cas où le put down-and-in rapporte */
 				gain_put_down_and_in += getStrike() - simulation[floor(getMaturite() * 365) - 1];
 			}
 		}
 		else {
-			if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) {
+			if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) { /* cas où le call down-and-out rapporte */
 				gain_call_down_and_out += simulation[floor(getMaturite() * 365) - 1] - getStrike();
 			}
-			else {
+			else { /* cas où le put down-and-out rapporte */
 				gain_put_down_and_out += getStrike() - simulation[floor(getMaturite() * 365) - 1];
 			}
 		}
@@ -145,17 +145,18 @@ float Option_Barrier::getPrice_put_down_and_out() {
 void Option_Barrier::afficher() {
 	std::cout << "Type de l'option: " << _type << std::endl;
 	std::cout << "Nom de l'actif: " << getAction().getName() << std::endl;
-	std::cout << "Barrière: " << barrier << std::endl;
+	std::cout << "Barri\x8Are: " << barrier << std::endl;
 	std::cout << "Strike: " << getStrike() << std::endl;
-	std::cout << "Maturite: " << getMaturite() << std::endl;
-	std::cout << "Volatilite: " << getAction().getVariance() << std::endl;
-	std::cout << "Prix du call up and in: " << price_call_up_and_in << std::endl;
-	std::cout << "Prix du call up and out: " << price_call_up_and_out << std::endl;
-	std::cout << "Prix du call down and in: " << price_call_down_and_in << std::endl;
-	std::cout << "Prix du call down and out: " << price_call_down_and_out << std::endl;
-	std::cout << "Prix du put up and in: " << price_put_up_and_in << std::endl;
-	std::cout << "Prix du put up and out: " << price_put_up_and_out << std::endl;
-	std::cout << "Prix du put down and in: " << price_put_down_and_in << std::endl;
-	std::cout << "Prix du put down and out: " << price_put_down_and_out << std::endl;
+	std::cout << "Maturit\x82: " << getMaturite() << std::endl;
+	std::cout << "Volatilit\x82: " << getAction().getVolatilite() << std::endl;
+	std::cout << "Prix initial du sous-jacent: " << getAction().getValue() << std::endl;
+	std::cout << "Prix du call up-and-in: " << price_call_up_and_in << std::endl;
+	std::cout << "Prix du call up-and-out: " << price_call_up_and_out << std::endl;
+	std::cout << "Prix du call down-and-in: " << price_call_down_and_in << std::endl;
+	std::cout << "Prix du call down-and-out: " << price_call_down_and_out << std::endl;
+	std::cout << "Prix du put up-and-in: " << price_put_up_and_in << std::endl;
+	std::cout << "Prix du put up-and-out: " << price_put_up_and_out << std::endl;
+	std::cout << "Prix du put down-and-in: " << price_put_down_and_in << std::endl;
+	std::cout << "Prix du put down-and-out: " << price_put_down_and_out << std::endl;
 	return;
 }

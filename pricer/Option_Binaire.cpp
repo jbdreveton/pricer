@@ -20,11 +20,11 @@ void Option_Binaire::setGain_moyen(int nb_simulation) {
 	for (int i = 0; i<nb_simulation; i++) {
 		std::vector<float> simulation = genererTrajectoire();
 		double max = *std::max_element(simulation.begin(), simulation.end());
-		if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) {
+		if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) { /* cas où le call rapporte */
 			gain_call += gain_fixe;
 		}
-		else {
-			gain_put += gain_fixe;
+		else {  /* cas où le put rapporte */
+			gain_put += gain_fixe; 
 		}
 	}
 	this->gain_moyen_call = gain_call / nb_simulation;
@@ -53,8 +53,9 @@ void Option_Binaire::afficher() {
 	std::cout << "Nom de l'actif: " << getAction().getName() << std::endl;
 	std::cout << "Valeur en cas de gain: " << gain_fixe << std::endl;
 	std::cout << "Strike: " << getStrike() << std::endl;
-	std::cout << "Maturite: " << getMaturite() << std::endl;
-	std::cout << "Volatilite: " << getAction().getVariance() << std::endl;
+	std::cout << "Maturit\x82: " << getMaturite() << std::endl;
+	std::cout << "Volatilit\x82: " << getAction().getVolatilite() << std::endl;
+	std::cout << "Prix initial du sous-jacent" << getAction().getValue() << std::endl;
 	std::cout << "Prix du call: " << price_call << std::endl;
 	std::cout << "Prix du put: " << price_put << std::endl;
 	return;

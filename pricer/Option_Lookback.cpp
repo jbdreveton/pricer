@@ -19,13 +19,13 @@ void Option_Lookback::setGain_moyen(int nb_simulation) {
 	float gain_put = 0;
 	for (int i = 0; i<nb_simulation; i++) {
 		std::vector<float> simulation = genererTrajectoire();
-		double max = *std::max_element(simulation.begin(), simulation.end());
+		double max = *std::max_element(simulation.begin(), simulation.end()); /* valeurs extrêmes qui seront comparées au strike */
 		double min = *std::min_element(simulation.begin(), simulation.end());
 		if (max > getStrike()) {
-			gain_put += max - getStrike();
+			gain_put += max - getStrike(); /* le détenteur du put va vendre au prix maximal qu'a pris l'actif lors du contrat */
 		}
 		if (min < getStrike()) {
-			gain_call += getStrike() - min;
+			gain_call += getStrike() - min; /* le détenteur du call va acheter au prix minimal qu'a pris l'actif lors du contrat */
 		}
 	}
 	this->gain_moyen_call = gain_call / nb_simulation;
@@ -53,8 +53,9 @@ void Option_Lookback::afficher() {
 	std::cout << "Type de l'option: " << _type << std::endl;
 	std::cout << "Nom de l'actif: " << getAction().getName() << std::endl;
 	std::cout << "Strike: " << getStrike() << std::endl;
-	std::cout << "Maturite: " << getMaturite() << std::endl;
-	std::cout << "Volatilite: " << getAction().getVariance() << std::endl;
+	std::cout << "Maturit\x82: " << getMaturite() << std::endl;
+	std::cout << "Volatilit\x82: " << getAction().getVolatilite() << std::endl;
+	std::cout << "Prix initial du sous-jacent: " << getAction().getValue() << std::endl;
 	std::cout << "Prix du call: " << price_call << std::endl;
 	std::cout << "Prix du put: " << price_put << std::endl;
 	return;

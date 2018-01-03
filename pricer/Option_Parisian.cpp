@@ -40,7 +40,7 @@ float Option_Parisian::getGain_moyen_put_down_and_out() {
 	return gain_moyen_put_down_and_out;
 }
 
-void Option_Parisian::setActivation(std::vector<float> simulation) {
+void Option_Parisian::setActivation(std::vector<float> simulation) {  /* Vérification si la barrière est franchie plus longtemps que la période */
 	activation_up = false;
 	activation_down = false;
 	int compteur_up = 0;
@@ -49,11 +49,11 @@ void Option_Parisian::setActivation(std::vector<float> simulation) {
 		if (simulation[i] > barrier) {
 			int consecutif_up = 1;
 			int j = i + 1;
-			while (simulation[j] > barrier & j<=periode) {
+			while (simulation[j] > barrier & j<=periode) {   /* Tant qu'on est au-dessus, on rajoute +1 au nb de journées consécutives où on est au-dessus de la période*/
 				j += 1;
 				consecutif_up += 1;
 			}
-			if (consecutif_up > compteur_up) {
+			if (consecutif_up > compteur_up) {   /* Si on a battu un record de consécutivité, on remplace la valeur du compteur */
 				compteur_up = consecutif_up;
 			}
 		}
@@ -69,7 +69,7 @@ void Option_Parisian::setActivation(std::vector<float> simulation) {
 			}
 		}
 	}
-	if (compteur_up >= periode) {
+	if (compteur_up >= periode) {  /* si le nombre de journées consécutives au-dessus de la barrière est plus grande que la période, on active la barrière */
 		activation_up = true;
 	}
 	if (compteur_down >= periode) {
@@ -90,35 +90,35 @@ void Option_Parisian::setGain_moyen(int nb_simulation) {
 	for (int i = 0; i<nb_simulation; i++) {
 		std::vector<float> simulation = genererTrajectoire();
 		setActivation(simulation);
-		if (activation_up == true) {
-			if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) {
+		if (activation_up == true) { /* Si la barrière est activée, on regarde les gains potentiels */
+			if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) { /* cas où le call up-and-in rapporte */
 				gain_call_up_and_in += simulation[floor(getMaturite() * 365) - 1] - getStrike();
 			}
-			else {
+			else { /* cas où le put up-and-in rapporte*/
 				gain_put_up_and_in += getStrike() - simulation[floor(getMaturite() * 365) - 1];
 			}
 		}
 		else {
-			if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) {
+			if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) { /* cas où le call up-and-out rapporte */
 				gain_call_up_and_out += simulation[floor(getMaturite() * 365) - 1] - getStrike();
 			}
-			else {
+			else { /* cas où le put up-and-out rapporte */
 				gain_put_up_and_out += getStrike() - simulation[floor(getMaturite() * 365) - 1];
 			}
 		}
 		if (activation_down == true) {
-			if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) {
+			if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) { /* cas où le call down-and-in rapporte */
 				gain_call_down_and_in += simulation[floor(getMaturite() * 365) - 1] - getStrike();
 			}
-			else {
+			else { /* cas où le put down-and-in rapporte */
 				gain_put_down_and_in += getStrike() - simulation[floor(getMaturite() * 365) - 1];
 			}
 		}
 		else {
-			if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) {
+			if (simulation[floor(getMaturite() * 365) - 1] > getStrike()) { /* cas où le call down-and-out rapporte */
 				gain_call_down_and_out += simulation[floor(getMaturite() * 365) - 1] - getStrike();
 			}
-			else {
+			else { /* cas où le put down-and-out rapporte */
 				gain_put_down_and_out += getStrike() - simulation[floor(getMaturite() * 365) - 1];
 			}
 		}
@@ -183,18 +183,19 @@ float Option_Parisian::getPrice_put_down_and_out() {
 void Option_Parisian::afficher() {
 	std::cout << "Type de l'option: " << _type << std::endl;
 	std::cout << "Nom de l'actif: " << getAction().getName() << std::endl;
-	std::cout << "Barrière: " << barrier << std::endl;
-	std::cout << "Période d'activation: " << periode << std::endl;
+	std::cout << "Barri\x8Are: " << barrier << std::endl;
+	std::cout << "P\x82riode d'activation: " << periode << std::endl;
 	std::cout << "Strike: " << getStrike() << std::endl;
-	std::cout << "Maturite: " << getMaturite() << std::endl;
-	std::cout << "Volatilite: " << getAction().getVariance() << std::endl;
-	std::cout << "Prix du call up and in: " << price_call_up_and_in << std::endl;
-	std::cout << "Prix du call up and out: " << price_call_up_and_out << std::endl;
-	std::cout << "Prix du call down and in: " << price_call_down_and_in << std::endl;
-	std::cout << "Prix du call down and out: " << price_call_down_and_out << std::endl;
-	std::cout << "Prix du put up and in: " << price_put_up_and_in << std::endl;
-	std::cout << "Prix du put up and out: " << price_put_up_and_out << std::endl;
-	std::cout << "Prix du put down and in: " << price_put_down_and_in << std::endl;
-	std::cout << "Prix du put down and out: " << price_put_down_and_out << std::endl;
+	std::cout << "Maturit\x82: " << getMaturite() << std::endl;
+	std::cout << "Volatilit\x82: " << getAction().getVolatilite() << std::endl;
+	std::cout << "Prix initial du sous-jacent: " << getAction().getValue() << std::endl;
+	std::cout << "Prix du call up-and-in: " << price_call_up_and_in << std::endl;
+	std::cout << "Prix du call up-and-out: " << price_call_up_and_out << std::endl;
+	std::cout << "Prix du call down-and-in: " << price_call_down_and_in << std::endl;
+	std::cout << "Prix du call down-and-out: " << price_call_down_and_out << std::endl;
+	std::cout << "Prix du put up-and-in: " << price_put_up_and_in << std::endl;
+	std::cout << "Prix du put up-and-out: " << price_put_up_and_out << std::endl;
+	std::cout << "Prix du put down-and-in: " << price_put_down_and_in << std::endl;
+	std::cout << "Prix du put down-and-out: " << price_put_down_and_out << std::endl;
 	return;
 }

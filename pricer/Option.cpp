@@ -20,21 +20,17 @@ Action Option::getAction() {
 	return _action;
 }
 
-float rand_normal(float mean, float stddev)
-{//Box muller method
+float rand_normal(float mean, float stddev){   /* Génération d'une réalisation d'une loi normale N(mean, stddev) selon la méthode Box-Muller*/
 	static float n2 = 0.0;
 	static int n2_cached = 0;
-	if (!n2_cached)
-	{
+	if (!n2_cached){
 		float x, y, r;
-		do
-		{
+		do{
 			x = 2.0*rand() / RAND_MAX - 1;
 			y = 2.0*rand() / RAND_MAX - 1;
-
 			r = x * x + y * y;
-		} while (r == 0.0 || r > 1.0);
-		{
+		} 
+		while (r == 0.0 || r > 1.0);{
 			float d = sqrt(-2.0*log(r) / r);
 			float n1 = x * d;
 			n2 = y * d;
@@ -43,21 +39,20 @@ float rand_normal(float mean, float stddev)
 			return result;
 		}
 	}
-	else
-	{
+	else{
 		n2_cached = 0;
 		return n2 * stddev + mean;
 	}
 }
 
 std::vector<float> Option::genererTrajectoire() {
-	float r = 0.05;
-	std::vector<float> trajectoire;
+	float r = 0.05;    /* Taux d'intérêt sans risque */
+	std::vector<float> trajectoire;    /* Vecteur contenant l'évolution du prix de l'actif */
 	trajectoire.push_back(_action.getValue());
 	int nb_jour = floor(_maturite * 365);
 	for (int i = 1; i<nb_jour; i++) {
-		float epsilon = rand_normal(0, 1);
-		trajectoire.push_back(trajectoire[i - 1] * exp((r - _action.getVariance()*_action.getVariance() / 2)*(1.0 / 365.0) - _action.getVariance()*epsilon*sqrt(1.0 / 365.0)));
+		float epsilon = rand_normal(0, 1); /* Génération du terme aléatoire */
+		trajectoire.push_back(trajectoire[i - 1] * exp((r - _action.getVolatilite()*_action.getVolatilite() / 2)*(1.0 / 365.0) - _action.getVolatilite()*epsilon*sqrt(1.0 / 365.0)));
 	}
 	return trajectoire;
 }

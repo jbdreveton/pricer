@@ -26,12 +26,12 @@ void Option_Basket::setGain_moyen(int nb_simulation) {
 	std::vector<float> resultat_final;
 	for (int i = 0; i<nb_simulation; i++) {
 		std::vector<float> resultat_final;
-		for (int j = 0; j < nb_actifs; j++) {
-			resultat_final.push_back(vecteur_option[j].genererTrajectoire()[vecteur_option[j].genererTrajectoire().size() - 1]);
+		for (int j = 0; j < nb_actifs; j++) { /* i-ième simulation de l'actif j */
+			resultat_final.push_back(vecteur_option[j].genererTrajectoire()[vecteur_option[j].genererTrajectoire().size() - 1]); /* valeur finale de la i-ième simulation de l'actif j*/
 		}
 		double final = 0;
 		for (int l = 0; l < nb_actifs; l++) {
-			final += resultat_final[l] * poids[l];
+			final += resultat_final[l] * poids[l]; /* calcul de la valeur finale pondérée qui sera comparée au strike */
 		}
 		if (final - getStrike() > 0) {
 			gain_call += final - getStrike();
@@ -66,11 +66,11 @@ void Option_Basket::afficher() {
 	for (int i = 0; i < nb_actifs; i++) {
 		std::cout << "Nom de l'actif " << i + 1 << " : " << vecteur_option[i].getAction().getName() << std::endl;
 		std::cout << "Prix initial de l'actif " << i + 1 << " : " << vecteur_option[i].getAction().getValue() << std::endl;
-		std::cout << "Volatilité de l'actif " << i + 1 << " : " << vecteur_option[i].getAction().getVariance() << std::endl;
+		std::cout << "Volatilit\x82 de l'actif " << i + 1 << " : " << vecteur_option[i].getAction().getVolatilite() << std::endl;
 		std::cout << "Poids de l'actif " << i + 1 << " : " << poids[i] << std::endl;
 	}
 	std::cout << "Strike: " << getStrike() << std::endl;
-	std::cout << "Maturite: " << getMaturite() << std::endl;
+	std::cout << "Maturit\x82: " << getMaturite() << std::endl;
 	std::cout << "Prix du call : " << price_call << std::endl;
 	std::cout << "Prix du put : " << price_put << std::endl;
 	return;
